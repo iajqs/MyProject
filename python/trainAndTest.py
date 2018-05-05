@@ -31,10 +31,10 @@ def get_random_block_from_data(data, labels, batch_size):
 
 #load the MINST
 ##get the train data
-trainPath = '/home/cks/PycharmProjects/MyProject/data/Train_sim.txt'
+trainPath = '/home/cks/PycharmProjects/MyProject/python/Word2Vec/data/train_sim.txt'
 train_labels, train_sims = getTheData(trainPath)
 ##get the test data
-testPath = '/home/cks/PycharmProjects/MyProject/data/Test_sim.txt'
+testPath = '/home/cks/PycharmProjects/MyProject/python/Word2Vec/data/test_sim.txt'
 test_labels, test_sims = getTheData(testPath)
 
 #register a session as the eviroment for caculate
@@ -68,14 +68,15 @@ cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 #initialize the global variables
 tf.global_variables_initializer().run()
+
+
 #train
 for i in range(1000):
-        batch_x, batch_y = get_random_block_from_data(train_sims, train_labels, 500)
-
+        batch_x, batch_y = get_random_block_from_data(train_sims, train_labels, 128)
+        # print(batch_y)
         ##this x is for the upper x
         ##this y_ is for the upper y_
-        _ ,cross = sess.run([train_step, cross_entropy],feed_dict={x:batch_x, y_:batch_y})
-
+        _,cross = sess.run([train_step, cross_entropy],feed_dict={x:batch_x, y_:batch_y})
         print(cross)
 
 
@@ -90,3 +91,4 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
 ##this x is the x first time input the system
 ##the y_ too
 print(accuracy.eval(feed_dict={x:train_sims, y_:train_labels}))
+
